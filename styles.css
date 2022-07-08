@@ -1,0 +1,72 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: #44f;
+}
+
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+
+#inp {
+    padding: 20px;
+    font-size: 24px;
+    border: 2px #333 solid;
+    border-radius: 8px;
+    width: 300px;
+    color: transparent;
+    font-family: 'Poppins', sans-serif;
+    outline: none;
+    caret-color: black;
+    font-weight: 600;
+}
+
+#inp::selection {
+    background: #333;
+    color: transparent;
+}
+
+#inp_div {
+    padding: 20px;
+    font-size: 24px;
+    border-radius: 8px;
+    position: absolute;
+    border: 2px #3330 solid;
+    top: 0;
+    left: 0;
+    color: #333;
+    width: 300px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    pointer-events: none;
+}
+
+#inp_div span {
+    animation: anim 0.3s linear forwards;
+}
+
+@keyframes anim {
+    0% {
+        font-size: 1px;
+    }
+
+    100% {
+        font-size: 24px;
+    }
+}
+
+#main{
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: #44f;
+    
+}
+#container{
+    position: relative;
+}

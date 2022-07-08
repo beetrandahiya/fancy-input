@@ -1,2 +1,2 @@
 # fancy-input
- Fancy Input Test Boxes using HTML, CSS and JS.
+ Fancy Input Text Boxes using HTML, CSS and JS.

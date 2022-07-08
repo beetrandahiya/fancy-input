@@ -3,12 +3,19 @@ oldval = inp.value;
 
 function anim() {
     val = inp.value;
+    //get cursor position
+    pos = inp.selectionStart;
     // if length increases add the letter to div
+
     if (val.length > oldval.length) {
         inputletter = val[val.length - 1];
         //make a span and put the letter in it
         var span = document.createElement("span");
         span.innerHTML = inputletter;
+        if(inputletter == " "){
+            span.style.display = "initial";
+            console.log(span.display);
+        }
         //put the span in the div
         document.getElementById("inp_div").appendChild(span);
         //add an animation to the span    
@@ -25,6 +32,9 @@ function anim() {
         }
 
     }
+    
+
+    
 
     oldval = val.substring(0, val.length - 1);
 }

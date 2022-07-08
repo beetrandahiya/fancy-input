@@ -44,16 +44,17 @@ body {
 }
 
 #inp_div span {
-    animation: anim 0.3s linear forwards;
+    animation: anim 0.3s linear infinite;
+    display: inline-block;
 }
 
 @keyframes anim {
     0% {
-        font-size: 1px;
+        transform: translateY(-10px);
     }
 
     100% {
-        font-size: 24px;
+        transform: translateY(0px);
     }
 }
 

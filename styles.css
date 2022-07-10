@@ -30,7 +30,7 @@ body {
     padding: 20px;
     font-size: 24px;
     border-radius: 8px;
-    width: 500px;
+    min-width: 500px;
     font-family: 'Poppins', sans-serif;
     font-weight: 600;
 }
@@ -56,7 +56,7 @@ body {
 }
 
 #inp_div span {
-    animation: drop 0.1s linear forwards;
+    animation: color-bloom 0.5s linear forwards;
     display: inline-block;
 }
 
@@ -95,5 +95,37 @@ body {
     }
     100% {
         transform: translate(0px);
+    }
+}
+
+@keyframes color-bloom{
+    0%{
+        color: hsl(0,100%,50%);
+        /*glow text*/
+        text-shadow: 0 0 10px hsl(0,100%,50%);
+
+    }
+    20%{
+        color: hsl(50,100%,50%);
+        text-shadow: 0 0 10px hsl(50,100%,50%);
+
+    }
+    40%{
+        color: hsl(100,100%,50%);
+        text-shadow: 0 0 10px hsl(100,100%,50%);
+
+    }
+    60%{
+        color: hsl(150,100%,50%);
+        text-shadow: 0 0 10px hsl(150,100%,50%);
+    }
+    80%{
+        color: hsl(200,100%,50%);
+        text-shadow: 0 0 10px hsl(200,100%,50%);
+
+    }
+    100%{
+        color: rgb(2, 1, 9);
+        text-shadow: 0 0 0px rgb(2, 1, 9);
     }
 }

@@ -56,7 +56,7 @@ body {
 }
 
 #inp_div span {
-    animation: color-bloom 0.5s linear forwards;
+    animation: zoom 0.2s linear forwards;
     display: inline-block;
 }
 
@@ -129,3 +129,16 @@ body {
         text-shadow: 0 0 0px rgb(2, 1, 9);
     }
 }
+
+@keyframes zoom {
+    0% {
+        transform: scale(1.5);
+    }
+    50% {
+        transform: scale(1.25);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+    

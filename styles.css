@@ -25,6 +25,10 @@ body {
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
 
+::spelling-error {
+    text-decoration: underline #333;
+  }
+
 .common {
     outline: none;
     padding: 20px;

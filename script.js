@@ -1,128 +1,10 @@
-inp = document.getElementById("inp");
-oldval = inp.value;
-
-function anim() {
-    val = inp.value;
-    //get cursor position
-    pos = inp.selectionStart;
-    // if length increases add the letter to div
-    //add multiple events to the same element
-    ['keydown', 'select', 'keyup'].forEach(function (event) {
-        inp.addEventListener(event, function (e) {
-            start = inp.selectionStart;
-            end = inp.selectionEnd;
-        });
-    });
-
-
-    if (val.length > oldval.length) {
-        pos = inp.selectionStart;
-        inputletter = val[pos - 1];
-        //make a span and put the letter in it
-        var span = document.createElement("span");
-        span.innerHTML = inputletter;
-        if (inputletter == " ") {
-            span.style.display = "initial";
-        }
-        //put the span in the div
-        //get the cursor position
-
-        //put the span in the div
-        document.getElementById("inp_div").insertBefore(span, document.getElementById("inp_div").childNodes[pos - 1]);
-        //add an animation to the span    
-
-    }
-
-    // if length decreases remove the letter from div
-    else if (val.length <= oldval.length) {
-        //get the selectionstart and selectionend
-        if (typeof start !== 'undefined' && start != end) {
-            //remove the letter from the div
-            for (i = start; i < end; i++) {
-                document.getElementById("inp_div").removeChild(document.getElementById("inp_div").childNodes[start]);
-            }
-        } else {
-            //get cursor position
-            pos = inp.selectionStart;
-            //remove the letter from the div
-            document.getElementById("inp_div").removeChild(document.getElementById("inp_div").childNodes[pos]);
-        }
-    }
-
-
-
-
-    oldval = val.substring(0, val.length - 1);
-}
-
-
-
-function anim_fn(elem) {
-    // get div next to the input
-    inp_div = elem.nextElementSibling;
-    val = elem.value;
-    //get cursor position
-    pos = elem.selectionStart;
-    console.log(pos);
-    // if length increases add the letter to div
-    //add multiple events to the same element
-    ['keydown', 'select', 'keyup'].forEach(function (event) {
-        elem.addEventListener(event, function (e) {
-            start = elem.selectionStart;
-            end = elem.selectionEnd;
-        });
-    });
-
-
-    if (val.length > oldval.length) {
-        pos = elem.selectionStart;
-        inputletter = val[pos - 1];
-        //make a span and put the letter in it
-        var span = document.createElement("span");
-        span.innerHTML = inputletter;
-        if (inputletter == " ") {
-            span.style.display = "initial";
-        }
-        //put the span in the div
-        //get the cursor position
-
-        //put the span in the div
-        inp_div.insertBefore(span, inp_div.childNodes[pos - 1]);
-        //add an animation to the span    
-
-    }
-
-    // if length decreases remove the letter from div
-    else if (val.length <= oldval.length) {
-        //get the selectionstart and selectionend
-        if (typeof start !== 'undefined' && start != end) {
-            //remove the letter from the div
-            for (i = start; i < end; i++) {
-                inp_div.removeChild(inp_div.childNodes[start]);
-            }
-        } else {
-            //get cursor position
-            pos = elem.selectionStart;
-            //remove the letter from the div
-            inp_div.removeChild(inp_div.childNodes[pos]);
-        }
-    }
-
-
-
-
-    oldval = val.substring(0, val.length - 1);
-}
-
-
-
-
 /* final script to get fancy-input element to work */
 
 /* create a custom element */
 var FancyInput = customElements.define('fancy-input', class extends HTMLElement {
     constructor() {
         super();
+        this.oldval = '';
         this.attachShadow({
             mode: 'open'
         });
@@ -133,7 +15,11 @@ var FancyInput = customElements.define('fancy-input', class extends HTMLElement 
         :host {
             display: block;
             position: relative;  
-            font: ` + this.getAttribute('font')+ `;
+            font: ` + this.getAttribute('font') + `;
+            font-size: ` + this.getAttribute('font-size') + `;
+            color: ` + this.getAttribute('color') + `;
+            background-color: ` + this.getAttribute('background-color') + `;
+            margin: ` + this.getAttribute('margin') + `;
         }
         :host > input {
             outline: none;
@@ -276,10 +162,104 @@ var FancyInput = customElements.define('fancy-input', class extends HTMLElement 
             }
         }
         ` + this.getAttribute('style') + `
-        </style>
-        <input type="text" oninput = anim_fn(this)>
-        <div class="inp_div">
-        </div>
+        </style>        
         `;
+        /*
+        <input type="text" oninput = anim_fn(this)>
+        <div class="inp_div">*/
+
+        //create input element
+        this.inp = document.createElement('input');
+        this.inp.setAttribute('type', 'text');
+        if (this.getAttribute('placeholder') != null) {
+            this.inp.setAttribute('placeholder', this.getAttribute('placeholder'));
+        }
+
+
+        //create div element
+        this.inp_div = document.createElement('div');
+        this.inp_div.setAttribute('class', 'inp_div');
+
+        this.shadowRoot.appendChild(this.inp);
+        this.shadowRoot.appendChild(this.inp_div);
+
+        //add event listener
+        this.inp.addEventListener('input', this.anim_fn.bind(this));
+        //this.inp.oninput = this.anim_fn(this.inp);
+
+        //style the input element
+
     }
+    //function to get start and end of selection
+    getSelection() {
+        this.start = this.inp.selectionStart;
+        this.end = this.inp.selectionEnd;
+        console.log(this.start, this.end);
+    }
+
+
+    anim_fn() {
+        // get div next to the input
+        console.log(this.inp_div.childNodes);
+        var val = this.inp.value;
+        console.log('val :', val);
+        //get cursor position
+        var pos = this.inp.selectionStart;
+        console.log('pos :', pos);
+        var elem = this.inp;
+        // if length increases add the letter to div
+        //add multiple events to the same element
+        ['keydown', 'select', 'keyup'].forEach(function (event) {
+            elem.addEventListener(event, function (e) {
+            });
+        });
+        
+       console.log('this.start :', this.start);
+        console.log('this.end :', this.end);
+        console.log('oldval :', this.oldval);
+
+        if (val.length > this.oldval.length) {
+            var pos = elem.selectionStart;
+            var inputletter = val[pos - 1];
+            //make a span and put the letter in it
+            var span = document.createElement("span");
+            span.innerHTML = inputletter;
+            if (inputletter == " ") {
+                span.style.display = "initial";
+            }
+            //put the span in the div
+            this.inp_div.insertBefore(span, this.inp_div.childNodes[pos - 1]);
+            //add an animation to the span    
+
+        }
+
+        // if length decreases remove the letter from div
+        else if (val.length <= this.oldval.length) {
+            //get the selectionstart and selectionend
+            console.log("length decreases");
+            console.log('start :', this.start);
+            console.log('end :', this.end);
+           if (typeof this.start != 'undefined' && this.start!=this.end){
+                //remove the letter from the div
+                console.log('code1');
+                for (i = this.start; i < this.end; i++) {
+                    this.inp_div.removeChild(this.inp_div.childNodes[this.start]);
+                }
+            } else {
+                //get cursor position
+                console.log('code2');
+                var pos = elem.selectionStart;
+                //remove the letter from the div
+                this.inp_div.removeChild(this.inp_div.childNodes[pos]);
+            } 
+           
+        }
+
+
+
+
+        this.oldval = val.substring(0, val.length - 1);
+    }
+
+
 });

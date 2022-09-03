@@ -1,5 +1,12 @@
 /* final script to get fancy-input element to work */
 
+// mutliple event listeners function
+const addMultipleListeners = (el, types, listener, options, useCapture) => {
+    types.forEach(type =>
+      el.addEventListener(type, listener, options, useCapture)
+    );
+  };
+  
 /* create a custom element */
 var FancyInput = customElements.define('fancy-input', class extends HTMLElement {
     constructor() {
@@ -164,17 +171,12 @@ var FancyInput = customElements.define('fancy-input', class extends HTMLElement 
         ` + this.getAttribute('style') + `
         </style>        
         `;
-        /*
-        <input type="text" oninput = anim_fn(this)>
-        <div class="inp_div">*/
-
         //create input element
         this.inp = document.createElement('input');
         this.inp.setAttribute('type', 'text');
         if (this.getAttribute('placeholder') != null) {
             this.inp.setAttribute('placeholder', this.getAttribute('placeholder'));
         }
-
 
         //create div element
         this.inp_div = document.createElement('div');
@@ -194,29 +196,22 @@ var FancyInput = customElements.define('fancy-input', class extends HTMLElement 
     getSelection() {
         this.start = this.inp.selectionStart;
         this.end = this.inp.selectionEnd;
-        console.log(this.start, this.end);
     }
-
-
     anim_fn() {
         // get div next to the input
-        console.log(this.inp_div.childNodes);
         var val = this.inp.value;
-        console.log('val :', val);
         //get cursor position
         var pos = this.inp.selectionStart;
-        console.log('pos :', pos);
         var elem = this.inp;
         // if length increases add the letter to div
         //add multiple events to the same element
-        ['keydown', 'select', 'keyup'].forEach(function (event) {
-            elem.addEventListener(event, function (e) {
-            });
-        });
+
+        addMultipleListeners(
+            elem,
+            ['keydown', 'selection', 'keyup'],
+            () => { this.getSelection() }
+          );
         
-       console.log('this.start :', this.start);
-        console.log('this.end :', this.end);
-        console.log('oldval :', this.oldval);
 
         if (val.length > this.oldval.length) {
             var pos = elem.selectionStart;
@@ -236,18 +231,14 @@ var FancyInput = customElements.define('fancy-input', class extends HTMLElement 
         // if length decreases remove the letter from div
         else if (val.length <= this.oldval.length) {
             //get the selectionstart and selectionend
-            console.log("length decreases");
-            console.log('start :', this.start);
-            console.log('end :', this.end);
+        
            if (typeof this.start != 'undefined' && this.start!=this.end){
                 //remove the letter from the div
-                console.log('code1');
-                for (i = this.start; i < this.end; i++) {
+                for (var i = this.start; i < this.end; i++) {
                     this.inp_div.removeChild(this.inp_div.childNodes[this.start]);
                 }
             } else {
                 //get cursor position
-                console.log('code2');
                 var pos = elem.selectionStart;
                 //remove the letter from the div
                 this.inp_div.removeChild(this.inp_div.childNodes[pos]);

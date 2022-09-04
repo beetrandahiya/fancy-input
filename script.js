@@ -11,7 +11,8 @@ const addMultipleListeners = (el, types, listener, options, useCapture) => {
 var FancyInput = customElements.define('fancy-input', class extends HTMLElement {
     constructor() {
         super();
-        this.oldval = '';
+        this.oldval = this.getAttribute('value') || '';
+        console.log(this.oldval);
         this.attachShadow({
             mode: 'open'
         });
@@ -25,7 +26,6 @@ var FancyInput = customElements.define('fancy-input', class extends HTMLElement 
             font: ` + this.getAttribute('font') + `;
             font-size: ` + this.getAttribute('font-size') + `;
             color: ` + this.getAttribute('color') + `;
-            background-color: ` + this.getAttribute('background-color') + `;
             margin: ` + this.getAttribute('margin') + `;
         }
         :host > input {
@@ -34,7 +34,8 @@ var FancyInput = customElements.define('fancy-input', class extends HTMLElement 
             border: ` + this.getAttribute('border') + `;
             border-radius: ` + this.getAttribute('border-radius') + `;
             padding:` + this.getAttribute('padding') + `;
-            border:none;
+            border: ` + this.getAttribute('border') + `;
+            background: `+this.getAttribute('background')+`;
 
             color: transparent;
             caret-color: #000;
@@ -52,6 +53,7 @@ var FancyInput = customElements.define('fancy-input', class extends HTMLElement 
             border: ` + this.getAttribute('border') + `;
             border-radius: ` + this.getAttribute('border-radius') + `;
             padding:` + this.getAttribute('padding') + `;
+            background: none;
 
             align-items: center;    
             position: absolute;
@@ -177,10 +179,12 @@ var FancyInput = customElements.define('fancy-input', class extends HTMLElement 
         if (this.getAttribute('placeholder') != null) {
             this.inp.setAttribute('placeholder', this.getAttribute('placeholder'));
         }
+        if (this.getAttribute('value') != null) {
+            this.inp.setAttribute('value', this.getAttribute('value'));
+        }
 
         //create div element
         this.inp_div = document.createElement('div');
-        this.inp_div.setAttribute('class', 'inp_div');
 
         this.shadowRoot.appendChild(this.inp);
         this.shadowRoot.appendChild(this.inp_div);
@@ -189,7 +193,18 @@ var FancyInput = customElements.define('fancy-input', class extends HTMLElement 
         this.inp.addEventListener('input', this.anim_fn.bind(this));
         //this.inp.oninput = this.anim_fn(this.inp);
 
-        //style the input element
+        // make span elements for default value
+        if(this.getAttribute('value') != null){
+            for(var i=0; i<this.getAttribute('value').length; i++){
+                var span = document.createElement('span');
+                span.textContent = this.getAttribute('value')[i];
+                if(this.getAttribute('value')[i] == ' '){
+                    span.style.display = 'initial';
+                }
+                this.inp_div.appendChild(span);
+                this.val = this.getAttribute('value');
+            }
+        }
 
     }
     //function to get start and end of selection
@@ -197,9 +212,10 @@ var FancyInput = customElements.define('fancy-input', class extends HTMLElement 
         this.start = this.inp.selectionStart;
         this.end = this.inp.selectionEnd;
     }
+
     anim_fn() {
         // get div next to the input
-        var val = this.inp.value;
+        this.val = this.inp.value;
         //get cursor position
         var pos = this.inp.selectionStart;
         var elem = this.inp;
@@ -213,9 +229,9 @@ var FancyInput = customElements.define('fancy-input', class extends HTMLElement 
           );
         
 
-        if (val.length > this.oldval.length) {
+        if (this.val.length > this.oldval.length) {
             var pos = elem.selectionStart;
-            var inputletter = val[pos - 1];
+            var inputletter = this.val[pos - 1];
             //make a span and put the letter in it
             var span = document.createElement("span");
             span.innerHTML = inputletter;
@@ -229,7 +245,7 @@ var FancyInput = customElements.define('fancy-input', class extends HTMLElement 
         }
 
         // if length decreases remove the letter from div
-        else if (val.length <= this.oldval.length) {
+        else if (this.val.length <= this.oldval.length) {
             //get the selectionstart and selectionend
         
            if (typeof this.start != 'undefined' && this.start!=this.end){
@@ -249,7 +265,7 @@ var FancyInput = customElements.define('fancy-input', class extends HTMLElement 
 
 
 
-        this.oldval = val.substring(0, val.length - 1);
+        this.oldval = this.val.substring(0, this.val.length - 1);
     }
 
 

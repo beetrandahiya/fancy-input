@@ -17,163 +17,34 @@ var FancyInput = customElements.define('fancy-input', class extends HTMLElement 
             mode: 'open'
         });
         //set default attributes
-
-        this.shadowRoot.innerHTML = `
+        this.styles=this.formatStyles(this.getAttribute('styles'));
+        this.shadowRoot.innerHTML += `
         <style>
-        :host {
-            display: block;
-            position: relative;  
-            font: ` + this.getAttribute('font') + `;
-            font-size: ` + this.getAttribute('font-size') + `;
-            color: ` + this.getAttribute('color') + `;
-            margin: ` + this.getAttribute('margin') + `;
-        }
-        :host > input {
-            outline: none;
-            font: inherit;
-            border: ` + this.getAttribute('border') + `;
-            border-radius: ` + this.getAttribute('border-radius') + `;
-            padding:` + this.getAttribute('padding') + `;
-            border: ` + this.getAttribute('border') + `;
-            background: `+this.getAttribute('background')+`;
-
-            color: transparent;
-            caret-color: #000;
-            width: ` + this.getAttribute('width') + `;
-            height: ` + this.getAttribute('height') + `;
-            
-        }
         :host > input::selection {
             background: #44f8;
             color: transparent;
         }
-        :host > div {
-            outline: none;
-            font: inherit;
-            border: ` + this.getAttribute('border') + `;
-            border-radius: ` + this.getAttribute('border-radius') + `;
-            padding:` + this.getAttribute('padding') + `;
-            background: none;
-
-            align-items: center;    
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: ` + this.getAttribute('width') + `;
-            height: ` + this.getAttribute('height') + `;
-            color: #333;
-            pointer-events: none;
-        }
-        :host > div > span {
-            animation: ` + this.getAttribute('animation') + ` linear forwards;
-            display: inline-block;
-            line-height: ` + this.getAttribute('height') + `;
-        }
-        /* animations */
-        @keyframes scale {
-            0% {
-                transform: scale(0);
-            }
-            50% {
-                transform: scale(1.1);
-            }
-            100% {
-                transform: scale(1);
-            }
-        }
-                
-        @keyframes drop {
-            0% {
-                transform: translateY(-30px);
-            }
-            80% {
-                transform: translateY(10px);
-            }
-            85% {
-                transform: translateY(-5px);
-            }
-            90% {
-                transform: translateY(10px);
-            }
-            100% {
-                transform: translateY(0px);
-            }
-        }
-
-        @keyframes shake {
-            0% {
-                transform: translate(1px,2px) rotate(35deg);
-            }
-            20% {
-                transform: translate(-2px,1px) rotate(-35deg);
-            }
-            40% {
-                transform: translate(4px,-2px) rotate(35deg);
-            }
-            60% {
-                transform: translate(-5px,2px) rotate(-15deg);
-            }
-            100% {
-                transform: translate(0px);
-            }
-        }
-
-        @keyframes color-bloom{
-            0%{
-                color: hsl(0,100%,50%);
-                /*glow text*/
-                text-shadow: 0 0 10px hsl(0,100%,50%);
-
-            }
-            20%{
-                color: hsl(50,100%,50%);
-                text-shadow: 0 0 10px hsl(50,100%,50%);
-
-            }
-            40%{
-                color: hsl(100,100%,50%);
-                text-shadow: 0 0 10px hsl(100,100%,50%);
-
-            }
-            60%{
-                color: hsl(150,100%,50%);
-                text-shadow: 0 0 10px hsl(150,100%,50%);
-            }
-            80%{
-                color: hsl(200,100%,50%);
-                text-shadow: 0 0 10px hsl(200,100%,50%);
-
-            }
-            100%{
-                color: rgb(2, 1, 9);
-                text-shadow: 0 0 0px rgb(2, 1, 9);
-            }
-        }
-
-        @keyframes zoom {
-            0% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(2);
-            }
-            100% {
-                transform: scale(1);
-            }
-        }
-
-        @keyframes fade-in {
-            0% {
-                opacity: 0;
-            }
-            100% {
-                opacity: 1;
-            }
-        }
-        ` + this.getAttribute('style') + `
-        </style>        
+             
+@keyframes drop {
+    0% {
+        transform: translateY(-30px);
+    }
+    80% {
+        transform: translateY(10px);
+    }
+    85% {
+        transform: translateY(-5px);
+    }
+    90% {
+        transform: translateY(10px);
+    }
+    100% {
+        transform: translateY(0px);
+    }
+}
+</style>
         `;
-        //create input element
+
         this.inp = document.createElement('input');
         this.inp.setAttribute('type', 'text');
         if (this.getAttribute('placeholder') != null) {
@@ -182,21 +53,73 @@ var FancyInput = customElements.define('fancy-input', class extends HTMLElement 
         if (this.getAttribute('value') != null) {
             this.inp.setAttribute('value', this.getAttribute('value'));
         }
-
-        //create div element
         this.inp_div = document.createElement('div');
 
-        this.shadowRoot.appendChild(this.inp);
+        this.shadowRoot.host.style.display = "block";
+        this.shadowRoot.host.style.position = "relative";
+        this.shadowRoot.host.style.margin = this.getAttribute('margin') || this.styles.margin || "0px";
+        this.shadowRoot.host.style.padding = "0px";
+        this.shadowRoot.host.style.border = "none";
+        this.shadowRoot.host.style.outline = "none";
+        this.shadowRoot.host.style.background = "none";
+        this.shadowRoot.host.style.font = this.getAttribute('font') || this.styles.font || "inherit";
+        this.shadowRoot.host.style.fontFamily = this.getAttribute('font-family') || this.styles['font-family'] || "sans-serif";
+        this.shadowRoot.host.style.fontSize = this.getAttribute('font-size') || this.styles['font-size'] || "16px";
+        this.shadowRoot.host.style.fontWeight = this.getAttribute('font-weight') || this.styles['font-weight'] || "normal";
+
+        // set styles for input
+        this.inp.style.outline = "none";
+        this.inp.style.border = this.getAttribute('border') || this.styles.border || "none";
+        this.inp.style.borderRadius = this.getAttribute('border-radius') || this.styles['border-radius'] || "0px";
+        this.inp.style.background = this.getAttribute('background') || this.styles.background || "none";
+        this.inp.style.width = this.getAttribute('width') || this.styles.width || "100%";
+        this.inp.style.height = this.getAttribute('height') || this.styles.height || "100%";
+        this.inp.style.margin = "0px";
+        this.inp.style.padding = this.getAttribute('padding') || this.styles.padding || "0px";
+        this.inp.style.fontFamily = this.getAttribute('font-family') || this.styles['font-family'] || "sans-serif";
+        this.inp.style.fontSize = this.getAttribute('font-size') || this.styles['font-size'] || "16px";
+        this.inp.style.fontWeight = this.getAttribute('font-weight') || this.styles['font-weight'] || "normal";
+        this.inp.style.font= this.getAttribute('font') || this.styles.font || "inherit";
+        this.inp.style.color = "transparent";
+        this.inp.style.caretColor = this.getAttribute('caret-color') || this.styles['caret-color'] || "#000";        
+
+        // set styles for input div
+        this.inp_div.style.position = "absolute";
+        this.inp_div.style.top = "0px";
+        this.inp_div.style.left = "0px";
+        this.inp_div.style.width = this.getAttribute('width') || this.styles.width || "100%";
+        this.inp_div.style.height = this.getAttribute('height') || this.styles.height || "100%";
+        this.inp_div.style.margin = "0px";
+        this.inp_div.style.padding = this.getAttribute('padding') || this.styles.padding || "0px";
+        this.inp_div.style.fontFamily = this.getAttribute('font-family') || this.styles['font-family'] || "sans-serif";
+        this.inp_div.style.fontSize = this.getAttribute('font-size') || this.styles['font-size'] || "16px";
+        this.inp_div.style.fontWeight = this.getAttribute('font-weight') || this.styles['font-weight'] || "normal";
+        this.inp_div.style.font= this.getAttribute('font') || this.styles.font || "inherit";
+        this.inp_div.style.color = this.getAttribute('color') || this.styles.color || "black";
+        this.inp_div.style.border = this.getAttribute('border') || this.styles.border || "none";
+        this.inp_div.style.borderRadius = this.getAttribute('border-radius') || this.styles['border-radius'] || "0px";
+        this.inp_div.style.borderColor = "transparent";
+        this.inp_div.style.background = "transparent";
+        this.inp_div.style.pointerEvents = "none";
+
+
+
         this.shadowRoot.appendChild(this.inp_div);
+        this.shadowRoot.appendChild(this.inp);
+     
 
         //add event listener
         this.inp.addEventListener('input', this.anim_fn.bind(this));
+        this.inp.addEventListener('click', this.getSelection());
         //this.inp.oninput = this.anim_fn(this.inp);
 
         // make span elements for default value
         if(this.getAttribute('value') != null){
             for(var i=0; i<this.getAttribute('value').length; i++){
                 var span = document.createElement('span');
+                span.style.display = "inline-block";
+                span.style.lineHeight = this.getAttribute('height') || this.styles.height || "100%";
+                span.style.animation = this.getAttribute('animation') + " linear" + " forwards";
                 span.textContent = this.getAttribute('value')[i];
                 if(this.getAttribute('value')[i] == ' '){
                     span.style.display = 'initial';
@@ -211,7 +134,22 @@ var FancyInput = customElements.define('fancy-input', class extends HTMLElement 
     getSelection() {
         this.start = this.inp.selectionStart;
         this.end = this.inp.selectionEnd;
+        console.log(this.start, this.end);
     }
+
+    //format styles from string to object
+    formatStyles(styles) {
+        var style = {};
+        styles = styles.split(';');
+        for (var i = 0; i < styles.length; i++) {
+            var s = styles[i].trim();
+            if (s != '') {
+            var s = styles[i].split(':');
+            style[s[0].trim()] = s[1].trim();}
+        }
+        console.log(style);
+        return style;
+    }        
 
     anim_fn() {
         // get div next to the input
@@ -224,7 +162,7 @@ var FancyInput = customElements.define('fancy-input', class extends HTMLElement 
 
         addMultipleListeners(
             elem,
-            ['keydown', 'selection', 'keyup'],
+            ['keydown', 'selection', 'keyup','click'],
             () => { this.getSelection() }
           );
         
@@ -234,6 +172,9 @@ var FancyInput = customElements.define('fancy-input', class extends HTMLElement 
             var inputletter = this.val[pos - 1];
             //make a span and put the letter in it
             var span = document.createElement("span");
+            span.style.display = "inline-block";
+            span.style.lineHeight = this.getAttribute('height') || this.styles.height || "100%";
+            span.style.animation = this.getAttribute('animation')+ " linear"+" forwards";
             span.innerHTML = inputletter;
             if (inputletter == " ") {
                 span.style.display = "initial";
@@ -262,10 +203,10 @@ var FancyInput = customElements.define('fancy-input', class extends HTMLElement 
            
         }
 
+        if(this.oldval!=this.val){
+            this.oldval = this.val.substring(0, this.val.length - 1);
+        }
 
-
-
-        this.oldval = this.val.substring(0, this.val.length - 1);
     }
 
 

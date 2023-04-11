@@ -294,3 +294,42 @@ var FancyInput = customElements.define('fancy-input', class extends HTMLElement 
 
 
 });
+
+
+function scaleeffect() {
+    var fi= document.getElementsByTagName('fancy-input')[0];
+    fi.setAttribute('animation', 'scale 0.2s');
+    //set pointer to input
+    fi.inp.focus();
+
+}
+function dropeffect() {
+    var fi= document.getElementsByTagName('fancy-input')[0];
+    fi.setAttribute('animation', 'drop 0.2s');
+    fi.inp.focus();
+
+}
+function bloomeffect() {
+    var fi= document.getElementsByTagName('fancy-input')[0];
+    fi.setAttribute('animation', 'color-bloom 0.2s');
+    fi.inp.focus();
+
+}
+function shakeeffect() {
+    var fi= document.getElementsByTagName('fancy-input')[0];
+    fi.setAttribute('animation', 'shake 0.2s');
+    fi.inp.focus();
+
+}
+function zoomeffect() {
+    var fi= document.getElementsByTagName('fancy-input')[0];
+    fi.setAttribute('animation', 'zoom 0.2s');
+    fi.inp.focus();
+
+}
+function fadeeffect() {
+    var fi= document.getElementsByTagName('fancy-input')[0];
+    fi.setAttribute('animation', 'fade-in 0.2s');
+    fi.inp.focus();
+
+}
